@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,12 +18,18 @@ public class Order {
     private int client_id;
     private double total_cost;
     private String status;
+    private String last_update_date;
 
-    public Order(int id, int client_id, double total_cost, String status) {
+    public String getLast_update_date() {
+        return last_update_date;
+    }
+
+    public Order(int id, int client_id, double total_cost, String status, String last_update_date) {
         this.id = id;
         this.client_id = client_id;
         this.total_cost = total_cost;
         this.status = status;
+        this.last_update_date = last_update_date == null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) : last_update_date;
     }
 
     public int getId() {
@@ -63,19 +71,22 @@ public class Order {
         public static final String CLIENT_ID = "client_id";
         public static final String TOTAL_COST = "total_cost";
         public static final String STATUS = "status";
+        public static final String LAST_UPDATE_DATE = "last_update_date";
 
         public static final String SQL_CREATE_TABLE = " CREATE TABLE IF NOT EXISTS " + OrderTable.TABLE_NAME + " ("
                 + OrderTable.ID + " INTEGER PRIMART KEY AUTOINCREMENT, "
                 + OrderTable.CLIENT_ID + " INTEGER,  "
                 + OrderTable.TOTAL_COST + " REAL, "
-                + OrderTable.STATUS + " TEXT)";
+                + OrderTable.STATUS + " TEXT, "
+                + OrderTable.LAST_UPDATE_DATE + " TEXT)";
+
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + OrderTable.TABLE_NAME;
 
         public static final String FIND_BY_ID_QUERY = OrderTable.ID + " = ? ";
     }
 
-    private final static String[] ALL_COLUMNS = new String[]{OrderTable.ID, OrderTable.CLIENT_ID, OrderTable.TOTAL_COST, OrderTable.STATUS};
+    private final static String[] ALL_COLUMNS = new String[]{OrderTable.ID, OrderTable.CLIENT_ID, OrderTable.TOTAL_COST, OrderTable.STATUS, OrderTable.LAST_UPDATE_DATE};
 
     public void addOrder(SQLiteOpenHelper helper, Order order){
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -83,6 +94,7 @@ public class Order {
         values.put(OrderTable.CLIENT_ID, order.getClient_id());
         values.put(OrderTable.TOTAL_COST, order.getTotal_cost());
         values.put(OrderTable.STATUS, order.getStatus());
+        values.put(OrderTable.LAST_UPDATE_DATE, order.getLast_update_date());
 
         db.insert(OrderTable.TABLE_NAME, null, values);
         db.close();
@@ -124,6 +136,7 @@ public class Order {
         values.put(OrderTable.CLIENT_ID, order.getClient_id());
         values.put(OrderTable.TOTAL_COST, order.getTotal_cost());
         values.put(OrderTable.STATUS, order.getStatus());
+        values.put(OrderTable.LAST_UPDATE_DATE, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
         int ret = db.update(OrderTable.TABLE_NAME, values, OrderTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(order.getId())});
         db.close();
@@ -138,6 +151,6 @@ public class Order {
     }
 
     private Order cursorToObject(Cursor cursor){
-        return new Order(cursor.getInt(0), cursor.getInt(1), cursor.getDouble(2), cursor.getString(3));
+        return new Order(cursor.getInt(0), cursor.getInt(1), cursor.getDouble(2), cursor.getString(3), cursor.getString(4));
     }
 }

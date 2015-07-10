@@ -13,35 +13,45 @@ import com.dmm.avondroid.database.dao.Product;
 /**
  * Created by waldekd on 2015-07-09.
  */
-public class DataBaseHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "AVON.db";
+public class DataBaseHelper {
 
-    private static String[] SQL_CREATE_ALL = {Client.ClientTable.SQL_CREATE_TABLE, Product.ProductTable.SQL_CREATE_TABLE, Order.OrderTable.SQL_CREATE_TABLE, OrderItem.OrderItemTable.SQL_CREATE_TABLE};
-    private static String[] SQL_DROP_ALL = {Client.ClientTable.SQL_DROP_TABLE, Product.ProductTable.SQL_DROP_TABLE, Order.OrderTable.SQL_DROP_TABLE, OrderItem.OrderItemTable.SQL_DROP_TABLE};
+    public DataBaseHolder db;
 
-
-    //constructors
     public DataBaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.db = new DataBaseHolder(context);
     }
 
-    //overrides
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        for (String singleQuery : SQL_CREATE_ALL) {
-            db.execSQL(singleQuery);
+
+
+    class DataBaseHolder extends SQLiteOpenHelper {
+        public static final int DATABASE_VERSION = 1;
+        public static final String DATABASE_NAME = "AVON.db";
+
+        private String[] SQL_CREATE_ALL = {Client.ClientTable.SQL_CREATE_TABLE, Product.ProductTable.SQL_CREATE_TABLE, Order.OrderTable.SQL_CREATE_TABLE, OrderItem.OrderItemTable.SQL_CREATE_TABLE};
+        private String[] SQL_DROP_ALL = {Client.ClientTable.SQL_DROP_TABLE, Product.ProductTable.SQL_DROP_TABLE, Order.OrderTable.SQL_DROP_TABLE, OrderItem.OrderItemTable.SQL_DROP_TABLE};
+
+
+        //constructors
+        public DataBaseHolder(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
-    }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for (String singleQuery : SQL_DROP_ALL) {
-            db.execSQL(singleQuery);
+        //overrides
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            for (String singleQuery : SQL_CREATE_ALL) {
+                db.execSQL(singleQuery);
+            }
         }
-        onCreate(db);
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            for (String singleQuery : SQL_DROP_ALL) {
+                db.execSQL(singleQuery);
+            }
+            onCreate(db);
+        }
+
     }
-
-
 
 }
