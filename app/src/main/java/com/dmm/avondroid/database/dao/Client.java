@@ -1,5 +1,13 @@
 package com.dmm.avondroid.database.dao;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by waldekd on 7/9/15.
  */
@@ -46,5 +54,90 @@ public class Client {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public static class ClientTable {
+        public static final String TABLE_NAME = "Client";
+
+        public static final String ID = "_id";
+        public static final String NAME = "name";
+        public static final String ACTIVE = "act";
+        public static final String DISCOUNT = "disc";
+
+        public static final String SQL_CREATE_TABLE = " CREATE TABLE IF NOT EXISTS " + ClientTable.TABLE_NAME + " ("
+                + ClientTable.ID + " INTEGER PRIMART KEY AUTOINCREMENT, "
+                + ClientTable.NAME + " TEXT,  "
+                + ClientTable.ACTIVE + " TEXT, "
+                + ClientTable.DISCOUNT + " REAL)";
+
+        public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + ClientTable.TABLE_NAME;
+
+        public static final String FIND_BY_ID_QUERY = ClientTable.ID + " = ? ";
+    }
+
+    private static final String[] ALL_COLUMNS = new String[]{ClientTable.ID, ClientTable.NAME, ClientTable.ACTIVE, ClientTable.DISCOUNT};
+
+    public void addClient(SQLiteOpenHelper helper, Client client){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ClientTable.NAME, client.getName());
+        values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
+        values.put(ClientTable.DISCOUNT, client.getDiscount());
+
+        db.insert(ClientTable.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public Client getClient(SQLiteOpenHelper helper, int id){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(id)}, null, null, null, null);
+
+        Client client = null;
+        if(cursor.moveToFirst()){
+            client = cursorToObject(cursor);
+        }
+        return client;
+    }
+
+    public int getClientsCount(SQLiteOpenHelper helper){
+        return getAllClients(helper).size();
+    }
+
+    public List<Client> getAllClients(SQLiteOpenHelper helper){
+        List<Client> clients = new ArrayList<>();
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                clients.add(cursorToObject(cursor));
+            }while(cursor.moveToNext());
+        }
+        return clients;
+    }
+
+    public int updateClient(SQLiteOpenHelper helper, Client client){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ClientTable.NAME, client.getName());
+        values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
+        values.put(ClientTable.DISCOUNT, client.getDiscount());
+
+        int ret = db.update(ClientTable.TABLE_NAME, values, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
+        db.close();
+        return ret;
+
+    }
+
+    public void deleteClient(SQLiteOpenHelper helper, Client client){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.delete(ClientTable.TABLE_NAME, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
+        db.close();
+    }
+
+    private Client cursorToObject(Cursor cursor){
+        return new Client(cursor.getInt(0), cursor.getString(1), "Y".equals(cursor.getString(2)), cursor.getDouble(3));
     }
 }
