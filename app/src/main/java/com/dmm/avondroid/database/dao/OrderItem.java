@@ -76,7 +76,7 @@ public class OrderItem {
         public static final String SUM_AT_POSITION = "sum_at_position";  /*quantity x price */
 
         public static final String SQL_CREATE_TABLE = " CREATE TABLE IF NOT EXISTS " + OrderItemTable.TABLE_NAME + " ("
-                + OrderItemTable.ID + " INTEGER PRIMART KEY AUTOINCREMENT, "
+                + OrderItemTable.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + OrderItemTable.ORDER_ID + " INTEGER,  "
                 + OrderItemTable.PRODUCT_ID + " INTEGER, "
                 + OrderItemTable.QUANTITY + " INTEGER, "
@@ -89,7 +89,7 @@ public class OrderItem {
 
     private final static String[] ALL_COLUMNS = new String[]{OrderItemTable.ID, OrderItemTable.ORDER_ID,OrderItemTable.PRODUCT_ID, OrderItemTable.QUANTITY, OrderItemTable.SUM_AT_POSITION};
 
-    public void addOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
+    public static void addOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(OrderItemTable.ORDER_ID, orderItem.getOrder_id());
@@ -102,7 +102,7 @@ public class OrderItem {
     }
 
 
-    public OrderItem getOrderItem(SQLiteOpenHelper helper, int id){
+    public static OrderItem getOrderItem(SQLiteOpenHelper helper, int id){
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query(OrderItemTable.TABLE_NAME, ALL_COLUMNS, OrderItemTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -114,11 +114,11 @@ public class OrderItem {
         return orderItem;
     }
 
-    public int getOrderItemsCount(SQLiteOpenHelper helper){
+    public static int getOrderItemsCount(SQLiteOpenHelper helper){
         return getAllOrderItems(helper).size();
     }
 
-    public List<OrderItem> getAllOrderItems(SQLiteOpenHelper helper){
+    public static List<OrderItem> getAllOrderItems(SQLiteOpenHelper helper){
         List<OrderItem> orderItems = new ArrayList<>();
 
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -132,7 +132,7 @@ public class OrderItem {
         return orderItems;
     }
 
-    public int updateOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
+    public static int updateOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
         SQLiteDatabase db = helper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -146,13 +146,13 @@ public class OrderItem {
 
     }
 
-    public void deleteOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
+    public static void deleteOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
         SQLiteDatabase db = helper.getWritableDatabase();
         db.delete(OrderItemTable.TABLE_NAME, OrderItemTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(orderItem.getId())});
         db.close();
     }
 
-    private OrderItem cursorToObject(Cursor cursor){
+    private static OrderItem cursorToObject(Cursor cursor){
         return new OrderItem(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getDouble(4));
     }
 }

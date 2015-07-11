@@ -2,22 +2,28 @@ package com.dmm.avondroid;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.dmm.avondroid.clients.ClientList;
+import com.dmm.avondroid.orders.OrderList;
+import com.dmm.avondroid.database.DataBaseHelper;
 
 
 public class StartActivity extends Activity {
+
+    public DataBaseHelper db_helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        db_helper = new DataBaseHelper(this);//only one Db helper shall exists for the application
+        ((GlobalApplication)getApplication()).setDb_helper(db_helper);//store db_helper in the global-wide place :)
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,11 +51,11 @@ public class StartActivity extends Activity {
         Intent i = null;
         switch(v.getId()){
             case R.id.btnOrders:
+                i = new Intent(this, OrderList.class);
                 break;
             case R.id.btnProducts:
                 break;
             case R.id.btnClients:
-                i = new Intent(this, ClientList.class);
                 break;
             case R.id.btnExit:
                 finish();
@@ -60,4 +66,6 @@ public class StartActivity extends Activity {
             startActivity(i);
         }
     }
+
+
 }

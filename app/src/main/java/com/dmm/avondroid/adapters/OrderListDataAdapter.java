@@ -8,21 +8,22 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.dmm.avondroid.R;
+import com.dmm.avondroid.database.DataBaseHelper;
 import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
 import com.dmm.avondroid.database.dao.OrderItem;
 import com.dmm.avondroid.database.dao.Product;
+import com.dmm.avondroid.orders.OrderListDisplayObject;
 
 import java.util.List;
 
 /**
  * Created by waldekd on 2015-07-10.
  */
-public class OrderListDataAdapter extends ArrayAdapter<Order> {
-    private List<Order> orders;
-    private List<Client> clients;
-    private List<OrderItem> orderItems;
-    private List<Product> products;
+public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
+    private DataBaseHelper db_helper;
+    protected OrderListDisplayObject[] ordersToDisplay;
+
 
     private static class ViewHolder{
         TextView client_name;
@@ -31,39 +32,14 @@ public class OrderListDataAdapter extends ArrayAdapter<Order> {
 
     }
 
-    public OrderListDataAdapter(Context context, List<Order> orders, List<Client> clients, List<OrderItem> orderItems, List<Product> products) {
+    public OrderListDataAdapter(Context context, OrderListDisplayObject[] orders) {
         super(context, 0, orders);
-        this.orders = orders;
-        this.clients = clients;
-        this.orderItems = orderItems;
-        this.products = products;
+        ordersToDisplay = orders;
     }
 
-    /*
-    *  <TextView
-        android:id="@+id/teClientName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/teLastUpdateDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@+id/teTotalPrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>*/
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Order currentOrder = orders.get(position);
+        OrderListDisplayObject currentOrder = ordersToDisplay[position];
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_order_list, parent, false);
@@ -73,9 +49,12 @@ public class OrderListDataAdapter extends ArrayAdapter<Order> {
         TextView teLastUpdateDate = (TextView)convertView.findViewById(R.id.teLastUpdateDate);
         TextView teTotalPrice = (TextView)convertView.findViewById(R.id.teTotalPrice);
 
+        teClientName.setText(currentOrder.getClientName());
+        teLastUpdateDate.setText(currentOrder.getLastUpdateDate());
+        teTotalPrice.setText(currentOrder.getTotalPrice());
 
-
-        //teClientName.setText();
-        //return super.getView(position, convertView, parent);
+        return convertView;
     }
+
+
 }

@@ -3,17 +3,21 @@ package com.dmm.avondroid.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
 import com.dmm.avondroid.database.dao.OrderItem;
 import com.dmm.avondroid.database.dao.Product;
 
+import java.io.Serializable;
+
 
 /**
  * Created by waldekd on 2015-07-09.
  */
-public class DataBaseHelper {
+public class DataBaseHelper{
 
     public DataBaseHolder db;
 
@@ -21,9 +25,7 @@ public class DataBaseHelper {
         this.db = new DataBaseHolder(context);
     }
 
-
-
-    class DataBaseHolder extends SQLiteOpenHelper {
+    public class DataBaseHolder extends SQLiteOpenHelper {
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "AVON.db";
 
@@ -51,6 +53,8 @@ public class DataBaseHelper {
             }
             onCreate(db);
         }
+
+
 
     }
 
