@@ -46,6 +46,14 @@ public class DataBaseHelper{
             }
         }
 
+
+        //the system did not want to call the onCreate event so onOpen is being called instead
+        @Override
+        public void onOpen(SQLiteDatabase db) {
+            super.onOpen(db);
+            onCreate(db);
+        }
+
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             for (String singleQuery : SQL_DROP_ALL) {

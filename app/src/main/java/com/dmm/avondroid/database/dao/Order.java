@@ -32,6 +32,14 @@ public class Order {
         this.last_update_date = last_update_date == null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) : last_update_date;
     }
 
+    public Order(int client_id, double total_cost, String status) {
+        this.client_id = client_id;
+        this.total_cost = total_cost;
+        this.status = status;
+        this.last_update_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    }
+
+
     public int getId() {
         return id;
     }
@@ -84,6 +92,7 @@ public class Order {
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + OrderTable.TABLE_NAME;
 
         public static final String FIND_BY_ID_QUERY = OrderTable.ID + " = ? ";
+        public static final String FIND_BY_CLIENT_AND_STATUS_AND_MODIF_DATE_QUERY = OrderTable.CLIENT_ID + " = ? AND " + OrderTable.STATUS + " = ? AND " + OrderTable.LAST_UPDATE_DATE + " = ? ";
     }
 
     private final static String[] ALL_COLUMNS = new String[]{OrderTable.ID, OrderTable.CLIENT_ID, OrderTable.TOTAL_COST, OrderTable.STATUS, OrderTable.LAST_UPDATE_DATE};
@@ -110,6 +119,18 @@ public class Order {
     }
     return order;
 }
+
+
+    public static Order getOrderByClientIdStatusLastModification(SQLiteOpenHelper helper, int id, String status, String last_mod){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(OrderTable.TABLE_NAME, ALL_COLUMNS, OrderTable.FIND_BY_CLIENT_AND_STATUS_AND_MODIF_DATE_QUERY, new String[]{String.valueOf(id), status, last_mod}, null, null, null, null);
+
+        Order order = null;
+        if(cursor.moveToFirst()){
+            order =  cursorToObject(cursor);
+        }
+        return order;
+    }
 
     public static int getOrdersCount(SQLiteOpenHelper helper){
         return getAllOrders(helper).size();

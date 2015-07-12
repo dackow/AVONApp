@@ -26,6 +26,12 @@ public class Client {
         this.discount = discount;
     }
 
+    public Client(String name, double discount) {
+        this.name = name;
+        this.discount = discount;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -68,13 +74,14 @@ public class Client {
 
         public static final String SQL_CREATE_TABLE = " CREATE TABLE IF NOT EXISTS " + ClientTable.TABLE_NAME + " ("
                 + ClientTable.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ClientTable.NAME + " TEXT,  "
+                + ClientTable.NAME + " TEXT COLLATE NOCASE,  "
                 + ClientTable.ACTIVE + " TEXT, "
                 + ClientTable.DISCOUNT + " REAL)";
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + ClientTable.TABLE_NAME;
 
         public static final String FIND_BY_ID_QUERY = ClientTable.ID + " = ? ";
+        public static final String FIND_BY_NAME_QUERY = ClientTable.NAME + " = ? ";
     }
 
     private static final String[] ALL_COLUMNS = new String[]{ClientTable.ID, ClientTable.NAME, ClientTable.ACTIVE, ClientTable.DISCOUNT};
@@ -93,6 +100,17 @@ public class Client {
     public static Client getClient(SQLiteOpenHelper helper, int id){
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(id)}, null, null, null, null);
+
+        Client client = null;
+        if(cursor.moveToFirst()){
+            client = cursorToObject(cursor);
+        }
+        return client;
+    }
+
+    public static Client getClientByName(SQLiteOpenHelper helper, String name){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_NAME_QUERY, new String[]{name}, null, null, null, null);
 
         Client client = null;
         if(cursor.moveToFirst()){

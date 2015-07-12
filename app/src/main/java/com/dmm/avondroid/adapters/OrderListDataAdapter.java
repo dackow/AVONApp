@@ -21,7 +21,6 @@ import java.util.List;
  * Created by waldekd on 2015-07-10.
  */
 public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
-    private DataBaseHelper db_helper;
     protected OrderListDisplayObject[] ordersToDisplay;
 
 

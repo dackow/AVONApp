@@ -24,6 +24,12 @@ public class Product {
         this.price = price;
     }
 
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -66,13 +72,14 @@ public class Product {
 
         public static final String SQL_CREATE_TABLE = " CREATE TABLE IF NOT EXISTS " + ProductTable.TABLE_NAME + " ("
                 + ProductTable.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ProductTable.NAME + " TEXT,  "
+                + ProductTable.NAME + " TEXT COLLATE NOCASE,  "
                 + ProductTable.ACTIVE + " TEXT, "
                 + ProductTable.PRICE + " REAL)";
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + ProductTable.TABLE_NAME;
 
         public static final String FIND_BY_ID_QUERY = ProductTable.ID + " = ? ";
+        public static final String FIND_BY_NAME_QUERY = ProductTable.NAME + " = ? ";
     }
 
     private static final String[] ALL_COLUMNS = new String[]{ProductTable.ID, ProductTable.NAME, ProductTable.ACTIVE, ProductTable.PRICE};
@@ -98,6 +105,18 @@ public class Product {
         }
         return product;
     }
+
+    public static Product getProductByName(SQLiteOpenHelper helper, String name){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(ProductTable.TABLE_NAME, ALL_COLUMNS, ProductTable.FIND_BY_NAME_QUERY, new String[]{name}, null, null, null, null);
+
+        Product product = null;
+        if(cursor.moveToFirst()){
+            product = cursorToObject(cursor);
+        }
+        return product;
+    }
+
 
     public static int getProductsCount(SQLiteOpenHelper helper){
         return getAllProducts(helper).size();

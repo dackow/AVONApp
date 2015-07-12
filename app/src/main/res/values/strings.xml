@@ -10,5 +10,7 @@
     <string name="btnProducts">Produkty</string>
     <string name="btnExit">Wyjście</string>
 
+    <string name="btnGenerateFakeData">Wygeneruj przykładowe dane</string>
+
     <string name="btnAddClient">Dodaj nowego klienta</string>
 </resources>

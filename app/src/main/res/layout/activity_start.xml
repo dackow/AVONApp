@@ -33,6 +33,17 @@
         android:onClick="onClick"/>
 
     <Button
+        android:id="@+id/btnGenerateFakeData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnProducts"
+        android:background="@android:color/holo_red_light"
+        android:textColor="@android:color/white"
+        android:text="@string/btnGenerateFakeData"
+        android:onClick="onClick"/>
+
+
+    <Button
         android:id="@+id/btnExit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
