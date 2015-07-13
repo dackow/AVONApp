@@ -26,6 +26,13 @@ public class OrderItem {
         this.sum_at_position = sum_at_position;
     }
 
+    public OrderItem(int order_id, int product_id, int quantity) {
+        this.order_id = order_id;
+        this.product_id = product_id;
+        this.quantity = quantity;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -85,6 +92,7 @@ public class OrderItem {
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + OrderItemTable.TABLE_NAME;
 
         public static final String FIND_BY_ID_QUERY = OrderItemTable.ID + " = ? ";
+        public static final String FIND_BY_ORDER_ID_AND_PRODUCT_ID_QUERY = OrderItemTable.ORDER_ID + " = ? AND " + OrderItemTable.PRODUCT_ID + " = ? ";
     }
 
     private final static String[] ALL_COLUMNS = new String[]{OrderItemTable.ID, OrderItemTable.ORDER_ID,OrderItemTable.PRODUCT_ID, OrderItemTable.QUANTITY, OrderItemTable.SUM_AT_POSITION};
@@ -113,6 +121,19 @@ public class OrderItem {
 
         return orderItem;
     }
+
+    public static OrderItem getOrderItemByOrderIdAndProductId(SQLiteOpenHelper helper, OrderItem item){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(OrderItemTable.TABLE_NAME, ALL_COLUMNS, OrderItemTable.FIND_BY_ORDER_ID_AND_PRODUCT_ID_QUERY, new String[]{String.valueOf(item.getOrder_id()), String.valueOf(item.getProduct_id())}, null, null, null, null);
+
+        OrderItem orderItem = null;
+        if(cursor.moveToFirst()) {
+            orderItem = cursorToObject(cursor);
+        }
+
+        return orderItem;
+    }
+
 
     public static int getOrderItemsCount(SQLiteOpenHelper helper){
         return getAllOrderItems(helper).size();

@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
+import com.dmm.avondroid.database.dao.OrderItem;
 import com.dmm.avondroid.database.dao.Product;
 import com.dmm.avondroid.orders.OrderList;
 import com.dmm.avondroid.database.DataBaseHelper;
@@ -92,7 +93,7 @@ public class StartActivity extends Activity {
         Client[] clients = new Client[]{client1, client2, client3};
 
         for(Client client : clients){
-            if(Client.getClientByName(db_helper.db, client.getName()) == null){
+            if(Client.getClientByName(db_helper.db, client) == null){
                 Client.addClient(db_helper.db, client);
             }
         }
@@ -103,23 +104,32 @@ public class StartActivity extends Activity {
 
         Product[] products = new Product[]{product1, product2, product3};
         for(Product product : products){
-            if(Product.getProductByName(db_helper.db, product.getName()) == null){
+            if(Product.getProductByName(db_helper.db, product) == null){
                 Product.addProduct(db_helper.db, product);
             }
         }
 
-        Order order1 = new Order(0,0.0,"N");
+        Order order1 = new Order(1,0.0,"N");
         Order order2 = new Order(1,0.0,"N");
         Order order3 = new Order(2,0.0,"N");
 
         Order[] orders  =new Order[]{order1, order2, order3};
         for(Order order : orders){
-            if(Order.getOrderByClientIdStatusLastModification(db_helper.db, order.getId(), order.getStatus(), order.getLast_update_date()) == null){
+            if(Order.getOrderByClientIdStatusLastModification(db_helper.db, order) == null){
                 Order.addOrder(db_helper.db, order);
             }
         }
 
-        //TODO!!!!!!!!!!!!!
+        OrderItem orderItem1 = new OrderItem(1,1,1);
+        OrderItem orderItem2 = new OrderItem(2,1,2);
+        OrderItem orderItem3 = new OrderItem(2,2,10);
+
+        OrderItem[] orderItems = new OrderItem[]{orderItem1, orderItem2, orderItem3};
+        for(OrderItem orderItem : orderItems){
+            if(OrderItem.getOrderItemByOrderIdAndProductId(db_helper.db, orderItem) == null){
+                OrderItem.addOrderItem(db_helper.db, orderItem);
+            }
+        }
 
     }
 

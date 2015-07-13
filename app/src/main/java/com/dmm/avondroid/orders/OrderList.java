@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.ListView;
 
 import com.dmm.avondroid.GlobalApplication;
 import com.dmm.avondroid.R;
+import com.dmm.avondroid.adapters.OrderListDataAdapter;
 import com.dmm.avondroid.database.DataBaseHelper;
 import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
@@ -21,18 +23,24 @@ public class OrderList extends Activity {
 
     protected DataBaseHelper db_helper;
     protected OrderListDisplayObject[] displayObjects;
+    protected OrderListDataAdapter adapter;
+    protected ListView lvListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_clientlist);
 
+        lvListView = (ListView)findViewById(R.id.lvOrderList);
+
         //get reference to global db_helper
         db_helper = ((GlobalApplication)getApplication()).getDb_helper();
         generateDisplayObjects();
 
         if(displayObjects != null){
-
+            adapter = new OrderListDataAdapter(getApplicationContext(), displayObjects);
+            lvListView.setAdapter(adapter);
         }
 
     }

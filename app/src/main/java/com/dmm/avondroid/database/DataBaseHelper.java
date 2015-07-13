@@ -51,6 +51,7 @@ public class DataBaseHelper{
         @Override
         public void onOpen(SQLiteDatabase db) {
             super.onOpen(db);
+
             onCreate(db);
         }
 

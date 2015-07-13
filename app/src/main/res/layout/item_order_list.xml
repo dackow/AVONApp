@@ -8,6 +8,7 @@
     <TextView
         android:id="@+id/teClientName"
         android:layout_width="match_parent"
+        android:textSize="@android:dimen/app_icon_size"
         android:layout_height="wrap_content" />
 
     <LinearLayout

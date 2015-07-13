@@ -121,15 +121,15 @@ public class Order {
 }
 
 
-    public static Order getOrderByClientIdStatusLastModification(SQLiteOpenHelper helper, int id, String status, String last_mod){
+    public static Order getOrderByClientIdStatusLastModification(SQLiteOpenHelper helper, Order order){
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(OrderTable.TABLE_NAME, ALL_COLUMNS, OrderTable.FIND_BY_CLIENT_AND_STATUS_AND_MODIF_DATE_QUERY, new String[]{String.valueOf(id), status, last_mod}, null, null, null, null);
+        Cursor cursor = db.query(OrderTable.TABLE_NAME, ALL_COLUMNS, OrderTable.FIND_BY_CLIENT_AND_STATUS_AND_MODIF_DATE_QUERY, new String[]{String.valueOf(order.getClient_id()), order.getStatus(), order.getStatus()}, null, null, null, null);
 
-        Order order = null;
+        Order existing_order = null;
         if(cursor.moveToFirst()){
-            order =  cursorToObject(cursor);
+            existing_order =  cursorToObject(cursor);
         }
-        return order;
+        return existing_order;
     }
 
     public static int getOrdersCount(SQLiteOpenHelper helper){

@@ -108,15 +108,15 @@ public class Client {
         return client;
     }
 
-    public static Client getClientByName(SQLiteOpenHelper helper, String name){
+    public static Client getClientByName(SQLiteOpenHelper helper, Client client){
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_NAME_QUERY, new String[]{name}, null, null, null, null);
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_NAME_QUERY, new String[]{client.getName()}, null, null, null, null);
 
-        Client client = null;
+        Client existing_client = null;
         if(cursor.moveToFirst()){
-            client = cursorToObject(cursor);
+            existing_client = cursorToObject(cursor);
         }
-        return client;
+        return existing_client;
     }
 
     public static int getClientsCount(DataBaseHelper.DataBaseHolder helper){

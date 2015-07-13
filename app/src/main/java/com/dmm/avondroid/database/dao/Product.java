@@ -106,15 +106,15 @@ public class Product {
         return product;
     }
 
-    public static Product getProductByName(SQLiteOpenHelper helper, String name){
+    public static Product getProductByName(SQLiteOpenHelper helper, Product product){
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(ProductTable.TABLE_NAME, ALL_COLUMNS, ProductTable.FIND_BY_NAME_QUERY, new String[]{name}, null, null, null, null);
+        Cursor cursor = db.query(ProductTable.TABLE_NAME, ALL_COLUMNS, ProductTable.FIND_BY_NAME_QUERY, new String[]{product.getName()}, null, null, null, null);
 
-        Product product = null;
+        Product existing_product = null;
         if(cursor.moveToFirst()){
-            product = cursorToObject(cursor);
+            existing_product = cursorToObject(cursor);
         }
-        return product;
+        return existing_product;
     }
 
 

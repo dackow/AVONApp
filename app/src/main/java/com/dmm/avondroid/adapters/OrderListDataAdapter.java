@@ -8,14 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.dmm.avondroid.R;
-import com.dmm.avondroid.database.DataBaseHelper;
-import com.dmm.avondroid.database.dao.Client;
-import com.dmm.avondroid.database.dao.Order;
-import com.dmm.avondroid.database.dao.OrderItem;
-import com.dmm.avondroid.database.dao.Product;
 import com.dmm.avondroid.orders.OrderListDisplayObject;
-
-import java.util.List;
 
 /**
  * Created by waldekd on 2015-07-10.
