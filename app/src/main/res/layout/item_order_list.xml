@@ -8,7 +8,8 @@
     <TextView
         android:id="@+id/teClientName"
         android:layout_width="match_parent"
-        android:textSize="@android:dimen/app_icon_size"
+        android:textSize="32sp"
+        android:textColor="@android:color/holo_purple"
         android:layout_height="wrap_content" />
 
     <LinearLayout
@@ -26,6 +27,7 @@
             android:id="@+id/teTotalPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_weight="1"/>
 
     </LinearLayout>

@@ -10,12 +10,22 @@ import android.widget.TextView;
 import com.dmm.avondroid.R;
 import com.dmm.avondroid.orders.OrderListDisplayObject;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
 /**
  * Created by waldekd on 2015-07-10.
  */
 public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
     protected OrderListDisplayObject[] ordersToDisplay;
 
+    int color_client_name_even = getContext().getResources().getColor(android.R.color.holo_blue_dark);
+    int color_client_name_odd = getContext().getResources().getColor(android.R.color.holo_green_dark);
+    int color_last_update_date = getContext().getResources().getColor(android.R.color.black);
+    int color_total_price = getContext().getResources().getColor(android.R.color.holo_red_dark);
+
+    NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pl_PL"));
 
     private static class ViewHolder{
         TextView client_name;
@@ -43,8 +53,17 @@ public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
 
         teClientName.setText(currentOrder.getClientName());
         teLastUpdateDate.setText(currentOrder.getLastUpdateDate());
-        teTotalPrice.setText(currentOrder.getTotalPrice());
+        teTotalPrice.setText(numberFormat.format(Double.valueOf(currentOrder.getTotalPrice())));
 
+        if(position % 2 == 0){
+            teClientName.setTextColor(color_client_name_even);
+        }else{
+            teClientName.setTextColor(color_client_name_odd);
+        }
+
+        teLastUpdateDate.setTextColor(color_last_update_date);
+
+        teTotalPrice.setBackgroundColor(color_total_price);
         return convertView;
     }
 
