@@ -27,12 +27,12 @@ public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
 
     NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pl_PL"));
 
-    private static class ViewHolder{
-        TextView client_name;
-        TextView last_update_date;
-        TextView total_price;
-
-    }
+//    private static class ViewHolder{
+//        TextView client_name;
+//        TextView last_update_date;
+//        TextView total_price;
+//
+//    }
 
     public OrderListDataAdapter(Context context, OrderListDisplayObject[] orders) {
         super(context, 0, orders);

@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".orders.OrderList" />
+        <activity android:name=".orders.ClientList" />
     </application>
 
 </manifest>

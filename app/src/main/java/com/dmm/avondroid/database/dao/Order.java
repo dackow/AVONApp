@@ -93,6 +93,8 @@ public class Order {
 
         public static final String FIND_BY_ID_QUERY = OrderTable.ID + " = ? ";
         public static final String FIND_BY_CLIENT_AND_STATUS_AND_MODIF_DATE_QUERY = OrderTable.CLIENT_ID + " = ? AND " + OrderTable.STATUS + " = ? AND " + OrderTable.LAST_UPDATE_DATE + " = ? ";
+        public static final String FIND_BY_CLIENT =  OrderTable.CLIENT_ID + " = ? ";
+        public static final String FIND_ACTIVE_BY_CLIENT =  OrderTable.CLIENT_ID + " = ? AND " + OrderTable.STATUS + " = 'A'";
     }
 
     private final static String[] ALL_COLUMNS = new String[]{OrderTable.ID, OrderTable.CLIENT_ID, OrderTable.TOTAL_COST, OrderTable.STATUS, OrderTable.LAST_UPDATE_DATE};
@@ -149,6 +151,22 @@ public class Order {
         }
         return orders;
     }
+
+    public static List<Order> getAllOrdersForClient(SQLiteOpenHelper helper, int client_id, boolean onlyActive){
+        List<Order> orders = new ArrayList<>();
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String query = onlyActive ? OrderTable.FIND_ACTIVE_BY_CLIENT : OrderTable.FIND_BY_CLIENT;
+        Cursor cursor = db.query(OrderTable.TABLE_NAME, ALL_COLUMNS, query, null, null, null, null, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                orders.add(cursorToObject(cursor));
+            }while(cursor.moveToNext());
+        }
+        return orders;
+    }
+
 
     public static int updateOrder(SQLiteOpenHelper helper, Order order){
         SQLiteDatabase db = helper.getWritableDatabase();

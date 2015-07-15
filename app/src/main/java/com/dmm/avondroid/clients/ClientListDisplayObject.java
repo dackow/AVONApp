@@ -1,13 +1,20 @@
 package com.dmm.avondroid.clients;
 
-import com.dmm.avondroid.GlobalApplication;
-import com.dmm.avondroid.database.dao.Client;
 
 /**
  * Created by waldekd on 2015-07-14.
  */
-public class ClientListDisplayObject extends Client {
+public class ClientListDisplayObject {
     protected int numberOfOrders;
+    protected String client_name;
+
+    public String getClient_name() {
+        return client_name;
+    }
+
+    public void setClient_name(String client_name) {
+        this.client_name = client_name;
+    }
 
     public int getNumberOfOrders() {
         return numberOfOrders;
@@ -17,9 +24,4 @@ public class ClientListDisplayObject extends Client {
         this.numberOfOrders = numberOfOrders;
     }
 
-    public ClientListDisplayObject(int id, String name, boolean active, double discount, int numOfOrders) {
-        super(id, name, active, discount);
-        numberOfOrders = numOfOrders;
-
-    }
 }

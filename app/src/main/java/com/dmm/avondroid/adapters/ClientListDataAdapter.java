@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.dmm.avondroid.R;
 import com.dmm.avondroid.clients.ClientListDisplayObject;
-import com.dmm.avondroid.orders.OrderListDisplayObject;
 
 /**
  * Created by waldekd on 2015-07-14.
@@ -22,32 +21,26 @@ public class ClientListDataAdapter extends ArrayAdapter<ClientListDisplayObject>
         clientsToDisplay = orders;
     }
 
-    private static class ViewHolder{
-        TextView client_name;
-    }
+//    private static class ViewHolder{
+//        TextView client_name;
+//        TextView number_of_order;
+//    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ClientListDisplayObject currentClient = clientsToDisplay[position];
 
         if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.client_item_list, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_client_list, parent, false);
         }
 
         TextView teClientName = (TextView)convertView.findViewById(R.id.teClientName);
+        TextView teNumberOfOrders = (TextView)convertView.findViewById(R.id.teNumberOfOrders);
 
-        teClientName.setText(currentClient.getName());
+        teClientName.setText(currentClient.getClient_name());
+        teNumberOfOrders.setText(currentClient.getNumberOfOrders());
 
 
-        if(position % 2 == 0){
-            teClientName.setTextColor(color_client_name_even);
-        }else{
-            teClientName.setTextColor(color_client_name_odd);
-        }
-
-        teLastUpdateDate.setTextColor(color_last_update_date);
-
-        teTotalPrice.setBackgroundColor(color_total_price);
         return convertView;
     }
 }

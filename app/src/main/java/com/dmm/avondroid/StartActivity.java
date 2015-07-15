@@ -12,6 +12,7 @@ import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
 import com.dmm.avondroid.database.dao.OrderItem;
 import com.dmm.avondroid.database.dao.Product;
+import com.dmm.avondroid.orders.ClientList;
 import com.dmm.avondroid.orders.OrderList;
 import com.dmm.avondroid.database.DataBaseHelper;
 
@@ -72,6 +73,7 @@ public class StartActivity extends Activity {
             case R.id.btnProducts:
                 break;
             case R.id.btnClients:
+                i = new Intent(this, ClientList.class);
                 break;
             case R.id.btnGenerateFakeData:
                 generateFakeData();
