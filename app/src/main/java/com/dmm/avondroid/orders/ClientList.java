@@ -21,9 +21,9 @@ public class ClientList extends BaseList<ClientListDisplayObject, ClientListData
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_orderlist);
+        super.onCreate(savedInstanceState, R.layout.activity_clientlist);
 
-        lvListView = (ListView) findViewById(R.id.lvOrderList);
+        lvListView = (ListView) findViewById(R.id.lvClientList);
 
         generateDisplayObjects();
 
