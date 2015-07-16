@@ -1,4 +1,4 @@
-package com.dmm.avondroid.orders;
+package com.dmm.avondroid.clients;
 
 
 import android.os.Bundle;

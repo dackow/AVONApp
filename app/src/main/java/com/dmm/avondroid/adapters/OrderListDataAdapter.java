@@ -27,12 +27,12 @@ public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
 
     NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pl_PL"));
 
-//    private static class ViewHolder{
-//        TextView client_name;
-//        TextView last_update_date;
-//        TextView total_price;
-//
-//    }
+    private static class ViewHolder{
+        TextView client_name;
+        TextView last_update_date;
+        TextView total_price;
+
+    }
 
     public OrderListDataAdapter(Context context, OrderListDisplayObject[] orders) {
         super(context, 0, orders);
@@ -47,9 +47,26 @@ public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_order_list, parent, false);
         }
 
-        TextView teClientName = (TextView)convertView.findViewById(R.id.teClientName);
-        TextView teLastUpdateDate = (TextView)convertView.findViewById(R.id.teLastUpdateDate);
-        TextView teTotalPrice = (TextView)convertView.findViewById(R.id.teTotalPrice);
+        TextView teClientName;
+        TextView teLastUpdateDate;
+        TextView teTotalPrice;
+
+        ViewHolder holder = (ViewHolder)convertView.getTag();
+        if(holder == null){
+            teClientName = (TextView)convertView.findViewById(R.id.teClientName);
+            teLastUpdateDate = (TextView)convertView.findViewById(R.id.teLastUpdateDate);
+            teTotalPrice = (TextView)convertView.findViewById(R.id.teTotalPrice);
+
+            holder = new ViewHolder();
+            holder.client_name = teClientName;
+            holder.last_update_date = teLastUpdateDate;
+            holder.total_price = teTotalPrice;
+            convertView.setTag(holder);
+        }else{
+            teClientName = holder.client_name;
+            teLastUpdateDate = holder.last_update_date;
+            teTotalPrice = holder.total_price;
+        }
 
         teClientName.setText(currentOrder.getClientName());
         teLastUpdateDate.setText(currentOrder.getLastUpdateDate());

@@ -19,7 +19,9 @@
         </activity>
 
         <activity android:name=".orders.OrderList" />
-        <activity android:name=".orders.ClientList" />
+        <activity android:name=".clients.ClientList" />
+        <activity android:name=".products.ProductList" />
+
     </application>
 
 </manifest>

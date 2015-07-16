@@ -13,7 +13,7 @@ import com.dmm.avondroid.clients.ClientListDisplayObject;
 /**
  * Created by waldekd on 2015-07-14.
  */
-public class ClientListDataAdapter extends ArrayAdapter<ClientListDisplayObject>{
+public class ClientListDataAdapter extends ArrayAdapter<ClientListDisplayObject> {
     protected ClientListDisplayObject[] clientsToDisplay;
 
     public ClientListDataAdapter(Context context, ClientListDisplayObject[] orders) {
@@ -21,26 +21,38 @@ public class ClientListDataAdapter extends ArrayAdapter<ClientListDisplayObject>
         clientsToDisplay = orders;
     }
 
-//    private static class ViewHolder{
-//        TextView client_name;
-//        TextView number_of_order;
-//    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ClientListDisplayObject currentClient = clientsToDisplay[position];
 
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_client_list, parent, false);
         }
 
-        TextView teClientName = (TextView)convertView.findViewById(R.id.teClientName);
-        TextView teNumberOfOrders = (TextView)convertView.findViewById(R.id.teNumberOfOrders);
+        TextView teClientName;
+        TextView teNumberOfOrders;
 
+        ViewHolder holder = (ViewHolder) convertView.getTag();
+        if (holder == null) {
+            teClientName = (TextView) convertView.findViewById(R.id.teClientName);
+            teNumberOfOrders = (TextView) convertView.findViewById(R.id.teNumberOfOrders);
+
+            holder = new ViewHolder();
+            holder.client_name = teClientName;
+            holder.number_of_order = teNumberOfOrders;
+            convertView.setTag(holder);
+        } else {
+            teClientName = holder.client_name;
+            teNumberOfOrders = holder.number_of_order;
+        }
         teClientName.setText(currentClient.getClient_name());
-        teNumberOfOrders.setText(currentClient.getNumberOfOrders());
-
+        teNumberOfOrders.setText(String.valueOf(currentClient.getNumberOfOrders()));
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView client_name;
+        TextView number_of_order;
     }
 }
