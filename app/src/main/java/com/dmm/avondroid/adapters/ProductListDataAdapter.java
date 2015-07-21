@@ -8,27 +8,26 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.dmm.avondroid.R;
+import com.dmm.avondroid.base.BaseAdapter;
 import com.dmm.avondroid.clients.ClientListDisplayObject;
 import com.dmm.avondroid.products.ProductListDisplayObject;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Created by waldekd on 2015-07-14.
  */
-public class ProductListDataAdapter extends ArrayAdapter<ProductListDisplayObject> {
-    protected ProductListDisplayObject[] productsToDisplay;
+public class ProductListDataAdapter extends BaseAdapter<ProductListDisplayObject> {
+    int color_total_price = getContext().getResources().getColor(R.color.colors_red);
 
     public ProductListDataAdapter(Context context, ProductListDisplayObject[] orders) {
-        super(context, 0, orders);
-        productsToDisplay = orders;
+        super(context, R.layout.item_product_list, orders);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ProductListDisplayObject currentProduct = productsToDisplay[position];
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_product_list, parent, false);
-        }
+        convertView = super.getView(position, convertView, parent);
 
         TextView teProductName;
         TextView tePrice;
@@ -46,8 +45,12 @@ public class ProductListDataAdapter extends ArrayAdapter<ProductListDisplayObjec
             teProductName = holder.product_name;
             tePrice = holder.price;
         }
-        teProductName.setText(currentProduct.getName());
-        tePrice.setText(String.valueOf(currentProduct.getPrice()));
+
+        teProductName.setTextColor((position % 2 == 0) ? color_client_name_even : color_client_name_odd);
+        teProductName.setText(currentElement.getName());
+
+        tePrice.setBackgroundColor(color_total_price);
+        tePrice.setText(numberFormat.format(Double.valueOf(currentElement.getPrice())));
 
         return convertView;
     }

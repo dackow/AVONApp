@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.dmm.avondroid.R;
+import com.dmm.avondroid.base.BaseAdapter;
 import com.dmm.avondroid.orders.OrderListDisplayObject;
 
 import java.text.NumberFormat;
@@ -17,15 +18,10 @@ import java.util.Locale;
 /**
  * Created by waldekd on 2015-07-10.
  */
-public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
-    protected OrderListDisplayObject[] ordersToDisplay;
+public class OrderListDataAdapter extends BaseAdapter<OrderListDisplayObject> {
 
-    int color_client_name_even = getContext().getResources().getColor(android.R.color.holo_blue_dark);
-    int color_client_name_odd = getContext().getResources().getColor(android.R.color.holo_green_dark);
-    int color_last_update_date = getContext().getResources().getColor(android.R.color.black);
-    int color_total_price = getContext().getResources().getColor(android.R.color.holo_red_dark);
-
-    NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pl_PL"));
+    int color_last_update_date = getContext().getResources().getColor(R.color.colors_black);
+    int color_total_price = getContext().getResources().getColor(R.color.colors_red);
 
     private static class ViewHolder{
         TextView client_name;
@@ -35,17 +31,12 @@ public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
     }
 
     public OrderListDataAdapter(Context context, OrderListDisplayObject[] orders) {
-        super(context, 0, orders);
-        ordersToDisplay = orders;
+        super(context, R.layout.item_order_list, orders);
     }
 
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        OrderListDisplayObject currentOrder = ordersToDisplay[position];
-
-        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_order_list, parent, false);
-        }
+        convertView = super.getView(position, convertView, parent);
 
         TextView teClientName;
         TextView teLastUpdateDate;
@@ -68,16 +59,11 @@ public class OrderListDataAdapter extends ArrayAdapter<OrderListDisplayObject> {
             teTotalPrice = holder.total_price;
         }
 
-        teClientName.setText(currentOrder.getClientName());
-        teLastUpdateDate.setText(currentOrder.getLastUpdateDate());
-        teTotalPrice.setText(numberFormat.format(Double.valueOf(currentOrder.getTotalPrice())));
+        teClientName.setText(currentElement.getClientName());
+        teLastUpdateDate.setText(currentElement.getLastUpdateDate());
+        teTotalPrice.setText(numberFormat.format(Double.valueOf(currentElement.getTotalPrice())));
 
-        if(position % 2 == 0){
-            teClientName.setTextColor(color_client_name_even);
-        }else{
-            teClientName.setTextColor(color_client_name_odd);
-        }
-
+        teClientName.setTextColor((position % 2 == 0) ? color_client_name_even : color_client_name_odd);
         teLastUpdateDate.setTextColor(color_last_update_date);
 
         teTotalPrice.setBackgroundColor(color_total_price);

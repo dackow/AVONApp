@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="even_colors_list">@android:color/holo_blue_dark</color>
+    <color name="odd_colors_list">@android:color/holo_green_dark</color>
+    <color name="colors_black">@android:color/black</color>
+    <color name="colors_red">@android:color/holo_red_dark</color>
+</resources>

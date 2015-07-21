@@ -1,33 +1,26 @@
 package com.dmm.avondroid.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.dmm.avondroid.R;
+import com.dmm.avondroid.base.BaseAdapter;
 import com.dmm.avondroid.clients.ClientListDisplayObject;
 
 /**
  * Created by waldekd on 2015-07-14.
  */
-public class ClientListDataAdapter extends ArrayAdapter<ClientListDisplayObject> {
-    protected ClientListDisplayObject[] clientsToDisplay;
+public class ClientListDataAdapter extends BaseAdapter<ClientListDisplayObject> {
 
     public ClientListDataAdapter(Context context, ClientListDisplayObject[] orders) {
-        super(context, 0, orders);
-        clientsToDisplay = orders;
+        super(context, R.layout.item_client_list, orders);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ClientListDisplayObject currentClient = clientsToDisplay[position];
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_client_list, parent, false);
-        }
+        convertView = super.getView(position, convertView, parent);
 
         TextView teClientName;
         TextView teNumberOfOrders;
@@ -45,8 +38,11 @@ public class ClientListDataAdapter extends ArrayAdapter<ClientListDisplayObject>
             teClientName = holder.client_name;
             teNumberOfOrders = holder.number_of_order;
         }
-        teClientName.setText(currentClient.getClient_name());
-        teNumberOfOrders.setText(String.valueOf(currentClient.getNumberOfOrders()));
+
+        teClientName.setTextColor((position % 2 == 0) ? color_client_name_even : color_client_name_odd);
+
+        teClientName.setText(currentElement.getClient_name());
+        teNumberOfOrders.setText(String.valueOf(currentElement.getNumberOfOrders()));
 
         return convertView;
     }
