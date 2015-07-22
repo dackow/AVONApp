@@ -7,7 +7,6 @@ import android.widget.ListView;
 import com.dmm.avondroid.R;
 import com.dmm.avondroid.adapters.ClientListDataAdapter;
 import com.dmm.avondroid.base.BaseList;
-import com.dmm.avondroid.clients.ClientListDisplayObject;
 import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
 
@@ -21,17 +20,12 @@ public class ClientList extends BaseList<ClientListDisplayObject, ClientListData
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_clientlist);
-
-        lvListView = (ListView) findViewById(R.id.lvClientList);
-
-        generateDisplayObjects();
+        super.onCreate(savedInstanceState);
 
         if (displayObjects != null) {
             adapter = new ClientListDataAdapter(getApplicationContext(), displayObjects);
-            lvListView.setAdapter(adapter);
+            lvList.setAdapter(adapter);
         }
-
     }
 
     @Override

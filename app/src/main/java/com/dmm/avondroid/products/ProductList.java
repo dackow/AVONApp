@@ -24,17 +24,11 @@ public class ProductList extends BaseList<ProductListDisplayObject, ProductListD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_productlist);
-
-        lvListView = (ListView) findViewById(R.id.lvProductList);
-
-        generateDisplayObjects();
-
+        super.onCreate(savedInstanceState);
         if (displayObjects != null) {
             adapter = new ProductListDataAdapter(getApplicationContext(), displayObjects);
-            lvListView.setAdapter(adapter);
+            lvList.setAdapter(adapter);
         }
-
     }
 
     @Override

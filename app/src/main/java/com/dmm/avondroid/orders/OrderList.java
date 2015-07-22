@@ -19,15 +19,10 @@ public class OrderList extends BaseList<OrderListDisplayObject, OrderListDataAda
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_orderlist);
-
-        lvListView = (ListView)findViewById(R.id.lvOrderList);
-
-        generateDisplayObjects();
-
+        super.onCreate(savedInstanceState);
         if(displayObjects != null){
             adapter = new OrderListDataAdapter(getApplicationContext(), displayObjects);
-            lvListView.setAdapter(adapter);
+            lvList.setAdapter(adapter);
         }
 
     }

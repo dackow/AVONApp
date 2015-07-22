@@ -6,6 +6,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.dmm.avondroid.GlobalApplication;
+import com.dmm.avondroid.R;
+import com.dmm.avondroid.adapters.ClientListDataAdapter;
 import com.dmm.avondroid.database.DataBaseHelper;
 
 
@@ -17,14 +19,13 @@ public abstract class BaseList<ItemToDisplayType, AdapterType extends ArrayAdapt
     protected DataBaseHelper db_helper;
     protected ItemToDisplayType[] displayObjects;
     protected AdapterType adapter;
-    protected ListView lvListView;
+    protected ListView lvList;
 
-    protected void onCreate(Bundle savedInstanceState, int layoutResId) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layoutResId);
-
-        //get reference to global db_helper
-        db_helper = ((GlobalApplication)getApplication()).getDb_helper();
+        setContentView(R.layout.activity_list);
+        lvList = (ListView) findViewById(R.id.lvList);
+        generateDisplayObjects();
     }
 
     protected abstract void generateDisplayObjects();
