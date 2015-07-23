@@ -139,11 +139,15 @@ public class Order {
     }
 
     public static List<Order> getAllOrders(SQLiteOpenHelper helper){
-        List<Order> orders = new ArrayList<>();
-
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(OrderTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
+        List<Order> orders = getAllOrders(db);
+        db.close();
+        return orders;
+    }
 
+    public static List<Order> getAllOrders(SQLiteDatabase db){
+        List<Order> orders = new ArrayList<>();
+        Cursor cursor = db.query(OrderTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
         if(cursor.moveToFirst()){
             do{
                 orders.add(cursorToObject(cursor));
@@ -151,6 +155,7 @@ public class Order {
         }
         return orders;
     }
+
 
     public static List<Order> getAllOrdersForClient(SQLiteOpenHelper helper, int client_id, boolean onlyActive){
         List<Order> orders = new ArrayList<>();
@@ -185,11 +190,58 @@ public class Order {
 
     public static void deleteOrder(SQLiteOpenHelper helper, Order order){
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.delete(OrderTable.TABLE_NAME, OrderTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(order.getId())});
+        deleteOrder(db, order);
         db.close();
     }
 
+    public static void deleteOrder(SQLiteDatabase db, Order order){
+        db.delete(OrderTable.TABLE_NAME, OrderTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(order.getId())});
+    }
+
+
+    public static void deleteAllOrders(SQLiteOpenHelper helper){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        deleteAllOrders(db);
+        db.close();
+    }
+
+    public static void deleteAllOrders(SQLiteDatabase db){
+        List<Order> all_orders = Order.getAllOrders(db);
+        for(Order single_order : all_orders){
+            List<OrderItem> order_items_for_order = single_order.getOrderItemsForOrder(db);
+            for(OrderItem single_order_item : order_items_for_order){
+                OrderItem.deleteOrderItem(db, single_order_item);
+            }
+            Order.deleteOrder(db, single_order);
+        }
+
+        List<OrderItem> remaining_order_items = OrderItem.getAllOrderItems(db);
+        for(OrderItem single_remaining_order_item : remaining_order_items){
+            OrderItem.deleteOrderItem(db, single_remaining_order_item);
+        }
+
+    }
+
+
     private static Order cursorToObject(Cursor cursor){
         return new Order(cursor.getInt(0), cursor.getInt(1), cursor.getDouble(2), cursor.getString(3), cursor.getString(4));
+    }
+
+    public List<OrderItem> getOrderItemsForOrder(SQLiteOpenHelper helper){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        List<OrderItem> order_items = getOrderItemsForOrder(db);
+        db.close();
+        return order_items;
+    }
+
+    public List<OrderItem> getOrderItemsForOrder(SQLiteDatabase db){
+        List<OrderItem> order_items = new ArrayList<>();
+        List<OrderItem> all_order_items = OrderItem.getAllOrderItems(db);
+        for(OrderItem single_order_item : all_order_items){
+            if(single_order_item.getOrder_id() == getId()){
+                order_items.add(single_order_item);
+            }
+        }
+        return order_items;
     }
 }

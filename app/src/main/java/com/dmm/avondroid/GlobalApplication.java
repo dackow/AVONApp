@@ -15,6 +15,7 @@ import com.dmm.avondroid.database.DataBaseHelper;
 public class GlobalApplication extends Application {
     protected DataBaseHelper db_helper;
     protected Boolean isDebugMode = null;
+    public static String TAG = "WDAvonDroid";
 
     public DataBaseHelper getDb_helper() {
         return db_helper;

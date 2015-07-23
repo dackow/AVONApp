@@ -20,6 +20,7 @@ public class OrderList extends BaseList<OrderListDisplayObject, OrderListDataAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        btnAdd.setText(R.string.btnAddOrder);
         if(displayObjects != null){
             adapter = new OrderListDataAdapter(getApplicationContext(), displayObjects);
             lvList.setAdapter(adapter);

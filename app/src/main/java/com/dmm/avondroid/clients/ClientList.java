@@ -2,6 +2,7 @@ package com.dmm.avondroid.clients;
 
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.dmm.avondroid.R;
@@ -22,6 +23,7 @@ public class ClientList extends BaseList<ClientListDisplayObject, ClientListData
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        btnAdd.setText(R.string.btnAddClient);
         if (displayObjects != null) {
             adapter = new ClientListDataAdapter(getApplicationContext(), displayObjects);
             lvList.setAdapter(adapter);

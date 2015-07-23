@@ -153,6 +153,20 @@ public class OrderItem {
         return orderItems;
     }
 
+    public static List<OrderItem> getAllOrderItems(SQLiteDatabase db){
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        Cursor cursor = db.query(OrderItemTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                orderItems.add(cursorToObject(cursor));
+            }while(cursor.moveToNext());
+        }
+        return orderItems;
+    }
+
+
     public static int updateOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
         SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -169,9 +183,14 @@ public class OrderItem {
 
     public static void deleteOrderItem(SQLiteOpenHelper helper, OrderItem orderItem){
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.delete(OrderItemTable.TABLE_NAME, OrderItemTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(orderItem.getId())});
+        deleteOrderItem(db, orderItem);
         db.close();
     }
+
+    public static void deleteOrderItem(SQLiteDatabase db, OrderItem orderItem){
+        db.delete(OrderItemTable.TABLE_NAME, OrderItemTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(orderItem.getId())});
+    }
+
 
     private static OrderItem cursorToObject(Cursor cursor){
         return new OrderItem(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getDouble(4));

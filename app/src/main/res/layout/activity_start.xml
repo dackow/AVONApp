@@ -42,6 +42,16 @@
         android:text="@string/btnGenerateFakeData"
         android:onClick="onClick"/>
 
+    <Button
+        android:id="@+id/btnCleanData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnGenerateFakeData"
+        android:background="@android:color/holo_green_dark"
+        android:textColor="@android:color/white"
+        android:text="@string/btnCleanData"
+        android:onClick="onClick"/>
+
 
     <Button
         android:id="@+id/btnExit"

@@ -1,5 +1,6 @@
 package com.dmm.avondroid.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -33,6 +34,7 @@ public class DataBaseHelper{
         private String[] SQL_DROP_ALL = {Client.ClientTable.SQL_DROP_TABLE, Product.ProductTable.SQL_DROP_TABLE, Order.OrderTable.SQL_DROP_TABLE, OrderItem.OrderItemTable.SQL_DROP_TABLE};
 
 
+
         //constructors
         public DataBaseHolder(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,7 +65,21 @@ public class DataBaseHelper{
             onCreate(db);
         }
 
+        public void restoreDBSequences(){
 
+            /*
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(ClientTable.NAME, client.getName());
+            values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
+            values.put(ClientTable.DISCOUNT, client.getDiscount());
+
+            int ret = db.update(ClientTable.TABLE_NAME, values, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
+            db.close();
+            return ret;*/
+
+        }
 
     }
 

@@ -25,6 +25,7 @@ public class ProductList extends BaseList<ProductListDisplayObject, ProductListD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        btnAdd.setText(R.string.btnAddProduct);
         if (displayObjects != null) {
             adapter = new ProductListDataAdapter(getApplicationContext(), displayObjects);
             lvList.setAdapter(adapter);

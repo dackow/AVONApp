@@ -11,6 +11,18 @@
     <string name="btnExit">Wyjście</string>
 
     <string name="btnGenerateFakeData">Wygeneruj przykładowe dane</string>
+    <string name="btnCleanData">Wyczyść dane</string>
+
 
     <string name="btnAddClient">Dodaj nowego klienta</string>
+    <string name="btnAddProduct">Dodaj nowy produkt</string>
+    <string name="btnAddOrder">Dodaj nowe zamówienie</string>
+
+    <string name="msgDataDeletedSuccessfully">Dane zostały skasowane poprawnie</string>
+    <string name="msgDataDeletedFail">Wystąpił problem przy usuwaniu danych</string>
+
+    <string name="msgDataGeneratedSuccessfully">Dane zostały wygenerowane poprawnie</string>
+    <string name="msgDataGeneratedFail">Wystąpił </string>
+
+
 </resources>

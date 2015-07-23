@@ -123,9 +123,15 @@ public class Product {
     }
 
     public static List<Product> getAllProducts(SQLiteOpenHelper helper){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        List<Product> products = getAllProducts(db);
+        db.close();
+        return products;
+    }
+
+    public static List<Product> getAllProducts(SQLiteDatabase db){
         List<Product> products = new ArrayList<>();
 
-        SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query(ProductTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
 
         if(cursor.moveToFirst()){
@@ -135,6 +141,7 @@ public class Product {
         }
         return products;
     }
+
 
     public static int updateProduct(SQLiteOpenHelper helper, Product product){
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -152,9 +159,21 @@ public class Product {
 
     public static void deleteProduct(SQLiteOpenHelper helper, Product product){
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.delete(ProductTable.TABLE_NAME, ProductTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(product.getId())});
+        deleteProduct(db, product);
         db.close();
     }
+
+    public static void deleteAllProducts(SQLiteDatabase db){
+        List<Product> all_products = Product.getAllProducts(db);
+        for(Product single_product : all_products){
+            Product.deleteProduct(db, single_product);
+        }
+    }
+
+    public static void deleteProduct(SQLiteDatabase db, Product product){
+        db.delete(ProductTable.TABLE_NAME, ProductTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(product.getId())});
+    }
+
 
     private static Product cursorToObject(Cursor cursor){
         return new Product(cursor.getInt(0), cursor.getString(1), "Y".equals(cursor.getString(2)), cursor.getDouble(3));

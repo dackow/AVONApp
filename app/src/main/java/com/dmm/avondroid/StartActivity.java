@@ -2,11 +2,15 @@ package com.dmm.avondroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.dmm.avondroid.database.dao.Client;
 import com.dmm.avondroid.database.dao.Order;
@@ -80,6 +84,9 @@ public class StartActivity extends Activity {
             case R.id.btnGenerateFakeData:
                 generateFakeData();
                 break;
+            case R.id.btnCleanData:
+                cleanData();
+                break;
             case R.id.btnExit:
                 finish();
                 break;
@@ -88,6 +95,26 @@ public class StartActivity extends Activity {
         if(i != null){
             startActivity(i);
         }
+    }
+
+    private void cleanData() {
+        boolean isError = false;
+        try {
+            SQLiteDatabase db = db_helper.db.getWritableDatabase();
+            Order.deleteAllOrders(db);
+            Client.deleteAllClients(db);
+            Product.deleteAllProducts(db);
+            db.close();
+        }catch(Exception e){
+            isError = true;
+            Log.e(GlobalApplication.TAG, e.getMessage());
+        }
+
+        showToast(isError ? R.string.msgDataDeletedFail : R.string.msgDataDeletedSuccessfully);
+    }
+
+    private void showToast(int msgID){
+        Toast.makeText(StartActivity.this, getResources().getString(msgID), Toast.LENGTH_SHORT).show();
     }
 
     private void generateFakeData() {
@@ -134,8 +161,5 @@ public class StartActivity extends Activity {
                 OrderItem.addOrderItem(db_helper.db, orderItem);
             }
         }
-
     }
-
-
 }

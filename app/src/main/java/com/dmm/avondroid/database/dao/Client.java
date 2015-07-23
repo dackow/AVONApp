@@ -14,6 +14,7 @@ import java.util.List;
  * Created by waldekd on 7/9/15.
  */
 public class Client {
+    private static final String[] ALL_COLUMNS = new String[]{ClientTable.ID, ClientTable.NAME, ClientTable.ACTIVE, ClientTable.DISCOUNT};
     private int id;
     private String name;
     private boolean active;
@@ -26,11 +27,111 @@ public class Client {
         this.discount = discount;
     }
 
+
     public Client(String name, double discount) {
         this.name = name;
         this.discount = discount;
     }
 
+    public static void addClient(SQLiteOpenHelper helper, Client client) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ClientTable.NAME, client.getName());
+        values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
+        values.put(ClientTable.DISCOUNT, client.getDiscount());
+
+        db.insert(ClientTable.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public static Client getClient(SQLiteOpenHelper helper, int id) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(id)}, null, null, null, null);
+
+        Client client = null;
+        if (cursor.moveToFirst()) {
+            client = cursorToObject(cursor);
+        }
+        return client;
+    }
+
+    public static Client getClientByName(SQLiteOpenHelper helper, Client client) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_NAME_QUERY, new String[]{client.getName()}, null, null, null, null);
+
+        Client existing_client = null;
+        if (cursor.moveToFirst()) {
+            existing_client = cursorToObject(cursor);
+        }
+        return existing_client;
+    }
+
+    public static int getClientsCount(DataBaseHelper.DataBaseHolder helper) {
+        return getAllClients(helper).size();
+    }
+
+    public static List<Client> getAllClients(SQLiteOpenHelper helper) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        List<Client> clients = getAllClients(db);
+        db.close();
+        return clients;
+    }
+
+    public static List<Client> getAllClients(SQLiteDatabase db) {
+        List<Client> clients = new ArrayList<>();
+
+        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                clients.add(cursorToObject(cursor));
+            } while (cursor.moveToNext());
+        }
+        return clients;
+    }
+
+
+    public static int updateClient(SQLiteOpenHelper helper, Client client) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ClientTable.NAME, client.getName());
+        values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
+        values.put(ClientTable.DISCOUNT, client.getDiscount());
+
+        int ret = db.update(ClientTable.TABLE_NAME, values, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
+        db.close();
+        return ret;
+
+    }
+
+    public static void deleteClient(SQLiteOpenHelper helper, Client client) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        deleteClient(db, client);
+        db.close();
+    }
+
+    public static void deleteClient(SQLiteDatabase db, Client client) {
+        db.delete(ClientTable.TABLE_NAME, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
+    }
+
+    public static void deleteAllClients(SQLiteOpenHelper helper) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        deleteAllClients(db);
+        db.close();
+    }
+
+    public static void deleteAllClients(SQLiteDatabase db) {
+        List<Client> all_clients = Client.getAllClients(db);
+        for (Client single_client : all_clients) {
+            Client.deleteClient(db, single_client);
+        }
+    }
+
+
+    private static Client cursorToObject(Cursor cursor) {
+        return new Client(cursor.getInt(0), cursor.getString(1), "Y".equals(cursor.getString(2)), cursor.getDouble(3));
+    }
 
     public int getId() {
         return id;
@@ -82,82 +183,5 @@ public class Client {
 
         public static final String FIND_BY_ID_QUERY = ClientTable.ID + " = ? ";
         public static final String FIND_BY_NAME_QUERY = ClientTable.NAME + " = ? ";
-    }
-
-    private static final String[] ALL_COLUMNS = new String[]{ClientTable.ID, ClientTable.NAME, ClientTable.ACTIVE, ClientTable.DISCOUNT};
-
-    public static void addClient(SQLiteOpenHelper helper, Client client){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ClientTable.NAME, client.getName());
-        values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
-        values.put(ClientTable.DISCOUNT, client.getDiscount());
-
-        db.insert(ClientTable.TABLE_NAME, null, values);
-        db.close();
-    }
-
-    public static Client getClient(SQLiteOpenHelper helper, int id){
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(id)}, null, null, null, null);
-
-        Client client = null;
-        if(cursor.moveToFirst()){
-            client = cursorToObject(cursor);
-        }
-        return client;
-    }
-
-    public static Client getClientByName(SQLiteOpenHelper helper, Client client){
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, ClientTable.FIND_BY_NAME_QUERY, new String[]{client.getName()}, null, null, null, null);
-
-        Client existing_client = null;
-        if(cursor.moveToFirst()){
-            existing_client = cursorToObject(cursor);
-        }
-        return existing_client;
-    }
-
-    public static int getClientsCount(DataBaseHelper.DataBaseHolder helper){
-        return getAllClients(helper).size();
-    }
-
-    public static List<Client> getAllClients(DataBaseHelper.DataBaseHolder helper){
-        List<Client> clients = new ArrayList<>();
-
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(ClientTable.TABLE_NAME, ALL_COLUMNS, null, null, null, null, null, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                clients.add(cursorToObject(cursor));
-            }while(cursor.moveToNext());
-        }
-        return clients;
-    }
-
-    public static int updateClient(SQLiteOpenHelper helper, Client client){
-        SQLiteDatabase db = helper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(ClientTable.NAME, client.getName());
-        values.put(ClientTable.ACTIVE, client.isActive() ? "Y" : "N");
-        values.put(ClientTable.DISCOUNT, client.getDiscount());
-
-        int ret = db.update(ClientTable.TABLE_NAME, values, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
-        db.close();
-        return ret;
-
-    }
-
-    public static void deleteClient(SQLiteOpenHelper helper, Client client){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        db.delete(ClientTable.TABLE_NAME, ClientTable.FIND_BY_ID_QUERY, new String[]{String.valueOf(client.getId())});
-        db.close();
-    }
-
-    private static Client cursorToObject(Cursor cursor){
-        return new Client(cursor.getInt(0), cursor.getString(1), "Y".equals(cursor.getString(2)), cursor.getDouble(3));
     }
 }
