@@ -22,7 +22,7 @@
     <string name="msgDataDeletedFail">Wystąpił problem przy usuwaniu danych</string>
 
     <string name="msgDataGeneratedSuccessfully">Dane zostały wygenerowane poprawnie</string>
-    <string name="msgDataGeneratedFail">Wystąpił </string>
+    <string name="msgDataGeneratedFail">Wystąpił problem przy generowaniu danych</string>
 
 
 </resources>

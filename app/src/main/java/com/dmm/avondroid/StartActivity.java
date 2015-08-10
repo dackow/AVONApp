@@ -104,6 +104,7 @@ public class StartActivity extends Activity {
             Order.deleteAllOrders(db);
             Client.deleteAllClients(db);
             Product.deleteAllProducts(db);
+            db_helper.db.restoreDBSequences(db);
             db.close();
         }catch(Exception e){
             isError = true;
@@ -113,8 +114,12 @@ public class StartActivity extends Activity {
         showToast(isError ? R.string.msgDataDeletedFail : R.string.msgDataDeletedSuccessfully);
     }
 
-    private void showToast(int msgID){
-        Toast.makeText(StartActivity.this, getResources().getString(msgID), Toast.LENGTH_SHORT).show();
+    private void showToast(int msgID, String... add_params){
+        String msg_string = getResources().getString(msgID);
+        if(add_params != null && add_params.length > 0 && add_params[0].length() > 0){
+            msg_string += add_params[0];
+        }
+        Toast.makeText(StartActivity.this, msg_string, Toast.LENGTH_SHORT).show();
     }
 
     private void generateFakeData() {
@@ -161,5 +166,30 @@ public class StartActivity extends Activity {
                 OrderItem.addOrderItem(db_helper.db, orderItem);
             }
         }
+
+        int orders_count = Order.getOrdersCount(db_helper.db);
+        int clients_count = Client.getClientsCount(db_helper.db);
+        int products_count = Product.getProductsCount(db_helper.db);
+        int order_items_count = OrderItem.getOrderItemsCount(db_helper.db);
+
+        boolean isError = !(orders_count > 0 && clients_count > 0 && products_count > 0 && order_items_count > 0);
+
+        StringBuilder msg = new StringBuilder();
+        if(!isError){
+            msg.append("\norders(");
+            msg.append(orders_count);
+            msg.append(")");
+            msg.append("\norder_items(");
+            msg.append(order_items_count);
+            msg.append(")");
+
+            msg.append("\nclients(");
+            msg.append(clients_count);
+            msg.append(")");
+            msg.append("\nproducts(");
+            msg.append(products_count);
+            msg.append(")");
+        }
+        showToast(!isError ? R.string.msgDataGeneratedSuccessfully : R.string.msgDataGeneratedFail, msg.toString());
     }
 }
